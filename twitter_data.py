@@ -3,8 +3,21 @@ import json
 from dotenv import load_dotenv
 import os
 from datetime import datetime as dt
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+
 
 from elasticsearch import Elasticsearch
+
+
+def clean(word_list):
+    # remove stopwords
+    stop_words = set(stopwords.words('english'))
+    new_list = [word for word in word_list if word not in stop_words]
+
+    # remove urls
+    new_list = [word for word in new_list if not word.startswith('http')]
+    return new_list
 
 
 load_dotenv()
@@ -32,7 +45,7 @@ class StreamAPI(tw.StreamingClient):
         doc = {
             '@timestamp': dt.now(),
             'text': json_data['data']['text'],
-            'word_list': json_data['data']['text'].split(' ')
+            'word_list': clean(json_data['data']['text'].split(' '))
         }
         print()
         es.index(index="betaa", document=doc)
@@ -47,7 +60,7 @@ def live_fetch():
     # rules.append("from:godofgeeks_")
     for rule in rules:
         streamer.add_rules(tw.StreamRule(rule))
-    # streamer.filter()
+    streamer.filter()
 
 
 def static_search():
@@ -61,7 +74,7 @@ def static_search():
             '@timestamp': dt.now(),
             'created_at': tweet.created_at,
             'text': tweet.text,
-            'word_list': tweet.text.split(' ')
+            'word_list': clean(tweet.text.split(' '))
         }
         print()
         es.index(index="statica", document=doc)
