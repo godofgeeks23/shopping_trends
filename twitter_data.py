@@ -5,18 +5,23 @@ import os
 from datetime import datetime as dt
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
-
+from cleantext import clean
 
 from elasticsearch import Elasticsearch
 
 
-def clean(word_list):
+def sieve(word_list):
     # remove stopwords
     stop_words = set(stopwords.words('english'))
     new_list = [word for word in word_list if word not in stop_words]
-
-    # remove urls
     new_list = [word for word in new_list if not word.startswith('http')]
+    new_list = [word for word in new_list if not word.startswith('RT')]
+    new_list = [word for word in new_list if not word.startswith('@')]
+    new_list = [clean(word, no_emoji=True, no_punct=True) for word in new_list]
+    new_list = [word for word in new_list if not word.isdigit()]
+    new_list = [word for word in new_list if len(word) > 2]
+    new_list = [i for i in new_list if i]
+    # print(new_list)
     return new_list
 
 
@@ -45,7 +50,7 @@ class StreamAPI(tw.StreamingClient):
         doc = {
             '@timestamp': dt.now(),
             'text': json_data['data']['text'],
-            'word_list': clean(json_data['data']['text'].split(' '))
+            'word_list': sieve(json_data['data']['text'].split(' '))
         }
         print()
         es.index(index="betaa", document=doc)
@@ -65,19 +70,19 @@ def live_fetch():
 
 def static_search():
     client = tw.Client(os.getenv('bearer_token'))
-    query = '#shop OR #shopping OR #sale OR #sale OR #flipkart OR #fashion -is:retweet lang:en'
+    query = '#shop OR #shopping OR #sale OR #sale OR #flipkart OR #fashion lang:en'
     tweets = tw.Paginator(client.search_recent_tweets, query=query,
                             tweet_fields=['context_annotations', 'created_at'], max_results=100).flatten(limit=100)
     for tweet in tweets:
-        print(tweet.text)
+        # print(tweet.text)
         doc = {
             '@timestamp': dt.now(),
             'created_at': tweet.created_at,
             'text': tweet.text,
-            'word_list': clean(tweet.text.split(' '))
+            'word_list': sieve(tweet.text.split(' '))
         }
         print()
-        es.index(index="statica", document=doc)
+        es.index(index="testinga", document=doc)
 
 
 static_search()
