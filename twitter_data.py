@@ -21,7 +21,7 @@ def sieve(word_list):
     new_list = [word for word in new_list if not word.isdigit()]
     new_list = [word for word in new_list if len(word) > 2]
     new_list = [i for i in new_list if i]
-    # print(new_list)
+    print(new_list)
     return new_list
 
 
@@ -82,7 +82,7 @@ def static_search():
             'word_list': sieve(tweet.text.split(' '))
         }
         print()
-        es.index(index="testinga", document=doc)
+        es.index(index="sampleindex", document=doc)
 
 
 static_search()
