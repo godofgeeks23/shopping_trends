@@ -17,7 +17,7 @@ def sieve(word_list):
     new_list = [word for word in new_list if not word.startswith('http')]
     new_list = [word for word in new_list if not word.startswith('RT')]
     new_list = [word for word in new_list if not word.startswith('@')]
-    new_list = [clean(word, no_emoji=True, no_punct=True) for word in new_list]
+    new_list = [clean(word, no_emoji=True, no_punct=True, replace_with_punct=" ") for word in new_list]
     new_list = [word for word in new_list if not word.isdigit()]
     new_list = [word for word in new_list if len(word) > 2]
     new_list = [i for i in new_list if i]
