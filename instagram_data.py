@@ -40,7 +40,7 @@ for media in medias:
     doc = {
             '@timestamp': dt.now(),
             'text': media.dict()['caption_text'],
-            'word_list': sieve(json_data['data']['text'].split(' '))
+            'word_list': sieve(media.dict()['caption_text'].split(' '))
         }
     es.index(index="sampleindex", document=doc)
     print()
