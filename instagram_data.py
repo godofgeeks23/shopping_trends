@@ -5,7 +5,9 @@ from instagrapi import Client
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from cleantext import clean
-
+from elasticsearch import Elasticsearch
+from datetime import datetime as dt
+import json
 
 def sieve(word_list):
     stop_words = set(stopwords.words('english'))
@@ -25,6 +27,8 @@ load_dotenv()
 cl = Client()
 cl.login(os.getenv('username'), os.getenv('password'))
 
+es = Elasticsearch("http://localhost:9200")
+
 # hashtag = cl.hashtag_info('fashion')
 # print(hashtag.dict())
 
@@ -33,4 +37,10 @@ medias = cl.hashtag_medias_top('fashion', amount=200)
 for media in medias:
     # pp(media.dict())
     print(sieve(media.dict()['caption_text'].split(' ')))
+    doc = {
+            '@timestamp': dt.now(),
+            'text': media.dict()['caption_text'],
+            'word_list': sieve(json_data['data']['text'].split(' '))
+        }
+    es.index(index="sampleindex", document=doc)
     print()
