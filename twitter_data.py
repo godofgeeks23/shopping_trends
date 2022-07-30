@@ -17,7 +17,8 @@ def sieve(word_list):
     new_list = [word for word in new_list if not word.startswith('http')]
     new_list = [word for word in new_list if not word.startswith('RT')]
     new_list = [word for word in new_list if not word.startswith('@')]
-    new_list = [clean(word, no_emoji=True, no_punct=True, replace_with_punct=" ") for word in new_list]
+    new_list = [clean(word, no_emoji=True, no_punct=True,
+                      replace_with_punct=" ") for word in new_list]
     new_list = [word for word in new_list if not word.isdigit()]
     new_list = [word for word in new_list if len(word) > 2]
     new_list = [i for i in new_list if i]
@@ -55,13 +56,15 @@ class StreamAPI(tw.StreamingClient):
         print()
         es.index(index="betaa", document=doc)
 
+
 def live_fetch():
     streamer = StreamAPI(os.getenv('bearer_token'))
     for rule in streamer.get_rules().data:
         streamer.delete_rules(rule.id)
     print(streamer.get_rules())
     rules = []
-    rules.append("#shop OR #shopping OR #sale OR #sale OR #flipkart OR #fashion")
+    rules.append(
+        "#shop OR #shopping OR #sale OR #sale OR #flipkart OR #fashion")
     # rules.append("from:godofgeeks_")
     for rule in rules:
         streamer.add_rules(tw.StreamRule(rule))
@@ -72,7 +75,7 @@ def static_search():
     client = tw.Client(os.getenv('bearer_token'))
     query = '#shop OR #shopping OR #sale OR #sale OR #flipkart OR #fashion lang:en'
     tweets = tw.Paginator(client.search_recent_tweets, query=query,
-                            tweet_fields=['context_annotations', 'created_at'], max_results=100).flatten(limit=100)
+                          tweet_fields=['context_annotations', 'created_at'], max_results=100).flatten(limit=100)
     for tweet in tweets:
         # print(tweet.text)
         doc = {
