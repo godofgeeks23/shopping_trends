@@ -9,12 +9,14 @@ from elasticsearch import Elasticsearch
 from datetime import datetime as dt
 import json
 
+
 def sieve(word_list):
     stop_words = set(stopwords.words('english'))
     new_list = [word for word in word_list if word not in stop_words]
     new_list = [word for word in new_list if not word.startswith('http')]
     new_list = [word for word in new_list if not word.startswith('@')]
-    new_list = [clean(word, no_emoji=True, no_punct=True, replace_with_punct=" ") for word in new_list]
+    new_list = [clean(word, no_emoji=True, no_punct=True,
+                      replace_with_punct=" ") for word in new_list]
     new_list = [word for word in new_list if not word.isdigit()]
     new_list = [word for word in new_list if len(word) > 2]
     new_list = [i for i in new_list if i]
@@ -38,9 +40,9 @@ for media in medias:
     # pp(media.dict())
     print(sieve(media.dict()['caption_text'].split(' ')))
     doc = {
-            '@timestamp': dt.now(),
-            'text': media.dict()['caption_text'],
-            'word_list': sieve(media.dict()['caption_text'].split(' '))
-        }
+        '@timestamp': dt.now(),
+        'text': media.dict()['caption_text'],
+        'word_list': sieve(media.dict()['caption_text'].split(' '))
+    }
     es.index(index="sampleindex", document=doc)
     print()
