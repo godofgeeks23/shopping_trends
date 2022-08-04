@@ -20,7 +20,7 @@ def sieve(word_list):
     new_list = [word for word in new_list if not word.isdigit()]
     new_list = [word for word in new_list if len(word) > 2]
     new_list = [i for i in new_list if i]
-    # print(new_list)
+    print(new_list)
     return new_list
 
 
