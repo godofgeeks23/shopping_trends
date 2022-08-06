@@ -1,4 +1,4 @@
-# Social Media Trend Analysis
+# Social - Media Trend Analysis
 
 A project which aims to analyse past as well as realtime trends from social media comprehensively, to give an overall idea of the product and sales patterns. It is intended to assist in prediction of future sales and potential products.
 
