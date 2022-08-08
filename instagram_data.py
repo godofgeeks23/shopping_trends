@@ -31,8 +31,8 @@ cl.login(os.getenv('username'), os.getenv('password'))
 
 es = Elasticsearch("http://localhost:9200")
 
-# hashtag = cl.hashtag_info('fashion')
-# print(hashtag.dict())
+hashtag = cl.hashtag_info('fashion')
+print(hashtag.dict())
 
 medias = cl.hashtag_medias_top('fashion', amount=200)
 # medias = cl.hashtag_medias_recent('fashion', amount=2)
