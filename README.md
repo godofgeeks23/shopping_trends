@@ -10,19 +10,27 @@ It is a cross platform solution with ability to visualise and handle large amoun
 
 The Elasticsearch components are not available in Ubuntu’s default package repositories. They can, however, be installed with APT after adding Elastic’s package source list.
 
+
     curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch |sudo gpg --dearmor -o /usr/share/keyrings/elastic.gpg
+
 
 Next, add the Elastic source list to the `sources.list.d` directory, where APT will search for new sources:
 
+
     echo "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+
 
 Next, update your package lists so APT will read the new Elastic source
 
+
     sudo apt update
+
 
 Then install Elasticsearch with this command:
 
+
     sudo apt install elasticsearch
+
 
 Start the Elasticsearch service with `systemctl`. Give Elasticsearch a few moments to start up. Otherwise, you may get errors about not being able to connect.
 
