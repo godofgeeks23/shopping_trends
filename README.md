@@ -34,25 +34,34 @@ Then install Elasticsearch with this command:
 
 Start the Elasticsearch service with `systemctl`. Give Elasticsearch a few moments to start up. Otherwise, you may get errors about not being able to connect.
 
+
     sudo systemctl start elasticsearch
+
 
 ### Installing and Configuring the Kibana Dashboard
 
+
     sudo apt install kibana
+
 
 Then start the Kibana service:
 
+
     sudo systemctl start kibana
+
 
 ### Installing Python dependencies and API Keys
 
 Install the required dependencies using the following command after cloning the repo locally.
 
+
 ```python
 pip install -r ./requirements.txt
 ```
 
+
 Create a `.env` file and copy paste the following code into it - 
+
 
     consumer_key='<your twitter developer account API key>'
     
@@ -68,16 +77,23 @@ Create a `.env` file and copy paste the following code into it -
     
     password='<your instagram account password>'
 
+
 ## Execution
 
+
 For fetching and analysing data from twitter, run:
+
 
     python3 ./twitter_data.py
 
 
+
 And for fetching and analysing instagram data, run:   
+
 
     python3 ./instagram_data.py
 
 
+
 To analyse and visualize, open `http://localhost:5601/` on your browser for the Kibana dashboard.
+
